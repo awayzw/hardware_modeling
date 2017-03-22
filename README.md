@@ -34,3 +34,16 @@
         * --systemc-target-func=kernel_function: where "kerenel_function" is the name of your design function.
         
         * filename.c: The input file name. 
+
+3. Example
+    
+    Input: gemm.c
+    ```
+    PolyRose --systemc-no-pretile   --systemc-target-func=kernel_gemm  gemm.c
+    ```
+    Output: rose_gemm.c
+
+    compile:
+    ```
+    g++ -g3 -I. -I$SYSTEMC_HOME/include -L. -L$SYSTEMC_HOME/lib-linux64 -lsystemc -lm -fno-deduce-init-list rose_gemm.c  -std=c++0x -o rose_gemm.out 
+    ```
