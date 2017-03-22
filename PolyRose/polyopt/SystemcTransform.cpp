@@ -1213,7 +1213,8 @@ void fixTestbenchFunction(SgFunctionDeclaration* tbFunc, string target_func_name
 
 int TransformToSystemC(SgProject* project, string targetname, string testbenchname, int depth, std::vector<string> unroll_factors, bool preprocess, bool no_pretile)
 {
-	assert(depth <= unroll_factors.size());
+	if(!no_pretile)
+		assert(depth <= unroll_factors.size());
 	setTLoops();
 	//lowLevelSCTransform myTraversal(targetname, testbenchname);
 

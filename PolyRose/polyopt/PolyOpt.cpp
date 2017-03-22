@@ -157,19 +157,25 @@ int PolyOptOptimizeProject(SgProject* project, PolyRoseOptions& polyoptions)
 	  printf("depth is %d\n", depth);
 	  bool no_pretile = !polyoptions.getSCPretile();
 	  //std::cout << "preprocess is " << preprocess << endl;
-	  const char* unroll_factor_file_name = "unroll_factor";
-	  ifstream unroll_factor_file(unroll_factor_file_name);
-	  assert(unroll_factor_file.good());
-	  string line;
-	  std::getline(unroll_factor_file, line);
-	  cout << line << endl;
-	  assert(line !="");
-	  istringstream iss(line);
-	  vector<string> unroll_factors;
-	  copy(istream_iterator<string>(iss),
-	         istream_iterator<string>(),
-	              back_inserter(unroll_factors));
-	  TransformToSystemC(project, polyoptions.getSCTargetFunc(), tbfunc, depth, unroll_factors, preprocess!="0", no_pretile);
+	  if(!no_pretile){
+	    const char* unroll_factor_file_name = "unroll_factor";
+	    ifstream unroll_factor_file(unroll_factor_file_name);
+	    assert(unroll_factor_file.good());
+	    string line;
+	    std::getline(unroll_factor_file, line);
+	    cout << line << endl;
+	    assert(line !="");
+	    istringstream iss(line);
+	    vector<string> unroll_factors;
+	    copy(istream_iterator<string>(iss),
+	      istream_iterator<string>(),
+	      back_inserter(unroll_factors));
+	    TransformToSystemC(project, polyoptions.getSCTargetFunc(), tbfunc, depth, unroll_factors, preprocess!="0", no_pretile);
+	  }
+	  else{
+	    vector<string> unroll_factors;
+	    TransformToSystemC(project, polyoptions.getSCTargetFunc(), tbfunc, depth, unroll_factors, preprocess!="0", no_pretile);
+	  }
   }
 
   // Translate parallel loops to parfor/vectorfor, and insert the
